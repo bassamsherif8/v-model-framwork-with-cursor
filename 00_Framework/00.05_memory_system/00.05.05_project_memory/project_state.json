@@ -1,0 +1,17 @@
+{
+  "project_name": "[PROJECT_NAME]",
+  "last_updated": "[YYYY-MM-DD HH:MM:SS]",
+  "current_phase": {
+    "phase_number": 0,
+    "phase_name": "Not Started",
+    "sub_phase": null,
+    "step": null
+  },
+  "completed_steps": [],
+  "pending_tasks": [],
+  "blockers": [],
+  "next_actions": [],
+  "personas_active": [],
+  "coordination_status": "Not Started"
+}
+

@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-Model Project Dashboard - Drone Cleaning System</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-content p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Overall Progress */
+        .overall-progress {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .overall-progress h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .progress-ring {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-circle-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-circle-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-details {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+            transition: width 0.8s ease;
+            border-radius: 6px;
+        }
+
+        /* V-Model Workflow */
+        .vmodel-workflow {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .vmodel-workflow h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+        }
+
+        .workflow-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .phase-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .phase-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .phase-card.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+        }
+
+        .phase-card.complete {
+            border-color: var(--success);
+        }
+
+        .phase-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .phase-card.complete .phase-number {
+            background: var(--success);
+        }
+
+        .phase-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .phase-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .phase-progress {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .phase-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.5s ease;
+        }
+
+        .phase-card.complete .phase-progress-fill {
+            background: var(--success);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Status Items */
+        .status-list {
+            list-style: none;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border-left: 4px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .status-item:hover {
+            background: #f1f5f9;
+        }
+
+        .status-item.complete {
+            border-left-color: var(--success);
+        }
+
+        .status-item.in-progress {
+            border-left-color: var(--warning);
+        }
+
+        .status-item.pending {
+            border-left-color: var(--danger);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-complete {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-in-progress {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-pending {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: var(--bg-card);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Timeline */
+        .timeline {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-event {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 30px;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--bg-card);
+        }
+
+        .timeline-event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .timeline-persona {
+            padding: 4px 12px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Loading & Error States */
+        .loading, .error {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-phases {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>📊 V-Model Project Dashboard</h1>
+                <p id="project-name">Drone Cleaning System Trailer</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="refreshDashboard()" id="refresh-btn">
+                    <span>🔄</span>
+                    <span>Refresh Data</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Section 1: Overall Progress -->
+        <div class="overall-progress" id="overall-progress">
+            <h2><span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 4px; margin-right: 10px; font-size: 0.9em;">1</span> Overall Project Progress</h2>
+            <div class="progress-ring">
+                <div class="progress-circle">
+                    <svg width="120" height="120">
+                        <circle cx="60" cy="60" r="54" stroke="var(--border)" stroke-width="8" fill="none"/>
+                        <circle id="progress-ring" cx="60" cy="60" r="54" stroke="var(--primary)" stroke-width="8" 
+                                fill="none" stroke-dasharray="339.292" stroke-dashoffset="339.292" 
+                                stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                    </svg>
+                    <div class="progress-circle-text">
+                        <div class="progress-circle-value" id="progress-value">0%</div>
+                        <div class="progress-circle-label">Complete</div>
+                    </div>
+                </div>
+                <div class="progress-details">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Current Phase</span>
+                            <strong id="current-phase-name">Loading...</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="phase-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 0.875rem; color: var(--text-secondary);">
+                        Last Updated: <span id="last-updated">Never</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: V-Model Workflow Phases -->
+        <div class="vmodel-workflow">
+            <h2><span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 4px; margin-right: 10px; font-size: 0.9em;">2</span> V-Model Workflow Phases</h2>
+            <div class="workflow-phases" id="workflow-phases">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Section 3: Memory System Status -->
+        <div class="vmodel-workflow" style="margin-top: 40px;">
+            <h2><span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 4px; margin-right: 10px; font-size: 0.9em;">3</span> Memory System Status</h2>
+            <div class="workflow-phases" id="memory-system-grid">
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <h3><span style="opacity: 0.7; font-size: 0.9em;">3.1</span> Coordination Log</h3>
+                        <span class="phase-status" id="coord-status">Active</span>
+                    </div>
+                    <div class="phase-content">
+                        <p class="phase-description">Track inter-persona communication and handoffs</p>
+                        <div class="stat-value" id="coord-events">0</div>
+                        <div class="stat-label">Events Logged</div>
+                    </div>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <h3><span style="opacity: 0.7; font-size: 0.9em;">3.2</span> Change Log</h3>
+                        <span class="phase-status" id="change-status">Active</span>
+                    </div>
+                    <div class="phase-content">
+                        <p class="phase-description">Track and propagate design changes</p>
+                        <div class="stat-value" id="change-count">0</div>
+                        <div class="stat-label">Changes Tracked</div>
+                    </div>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <h3><span style="opacity: 0.7; font-size: 0.9em;">3.3</span> Interface Registry</h3>
+                        <span class="phase-status" id="interface-status">Active</span>
+                    </div>
+                    <div class="phase-content">
+                        <p class="phase-description">Manage system interfaces and ICDs</p>
+                        <div class="stat-value" id="interface-count">0</div>
+                        <div class="stat-label">Interfaces Defined</div>
+                    </div>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <h3><span style="opacity: 0.7; font-size: 0.9em;">3.4</span> Validation Log</h3>
+                        <span class="phase-status" id="validation-status">Active</span>
+                    </div>
+                    <div class="phase-content">
+                        <p class="phase-description">Track validation activities and results</p>
+                        <div class="stat-value" id="validation-count">0</div>
+                        <div class="stat-label">Validations Performed</div>
+                    </div>
+                </div>
+                
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <h3><span style="opacity: 0.7; font-size: 0.9em;">3.5</span> Project Memory</h3>
+                        <span class="phase-status" id="memory-status">Active</span>
+                    </div>
+                    <div class="phase-content">
+                        <p class="phase-description">Centralized project state and decisions</p>
+                        <div class="stat-value" id="decision-count">0</div>
+                        <div class="stat-label">Decisions Recorded</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('overview')" id="tab-btn-overview">📋 Overview</button>
+            <button class="tab-btn" onclick="showTab('requirements')" id="tab-btn-requirements">📝 Requirements</button>
+            <button class="tab-btn" onclick="showTab('design')" id="tab-btn-design">🎨 Design</button>
+            <button class="tab-btn" onclick="showTab('implementation')" id="tab-btn-implementation">⚙️ Implementation</button>
+            <button class="tab-btn" onclick="showTab('verification')" id="tab-btn-verification">✅ Verification</button>
+            <button class="tab-btn" onclick="showTab('production')" id="tab-btn-production">🏭 Production</button>
+            <button class="tab-btn" onclick="showTab('timeline')" id="tab-btn-timeline">⏱️ Timeline</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="dashboard-grid" id="overview-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <div id="tab-requirements" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Requirements Status</h3>
+                </div>
+                <div id="requirements-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-design" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Design Status</h3>
+                </div>
+                <div id="design-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-implementation" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Implementation Status</h3>
+                </div>
+                <div id="implementation-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-verification" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Verification Status</h3>
+                </div>
+                <div id="verification-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-production" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Production Status</h3>
+                </div>
+                <div id="production-content">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-timeline" class="tab-content">
+            <div class="timeline" id="timeline-content">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>V-Model Project Dashboard | Last Updated: <span id="footer-updated">Never</span></p>
+        </div>
+    </div>
+
+    <script>
+        let dashboardData = null;
+        let currentTab = 'overview';
+
+        // Tab switching
+        function showTab(tabName) {
+            currentTab = tabName;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabButton = document.getElementById(`tab-btn-${tabName}`);
+            if (tabButton) {
+                tabButton.classList.add('active');
+            }
+            
+            // Update content panels
+            document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
+            const tabContent = document.getElementById(`tab-${tabName}`);
+            if (tabContent) {
+                tabContent.classList.add('active');
+            }
+            
+            // Always render appropriate content (show loading if data not ready)
+            renderTabContent(tabName);
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('dashboard_data.json?' + new Date().getTime());
+                if (!response.ok) {
+                    throw new Error('Failed to load dashboard data');
+                }
+                dashboardData = await response.json();
+                return dashboardData;
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showError('Failed to load dashboard data. Make sure you are running a local web server and that dashboard_data.json exists.');
+                return null;
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const container = document.querySelector('.container');
+            container.innerHTML = `
+                <div class="error">
+                    <h2>⚠️ Dashboard Loading Error</h2>
+                    <p>${message}</p>
+                    <p style="margin-top: 20px;">
+                        <strong>Solution:</strong> Run <code>python generate_dashboard_data.py</code> to generate the data file,
+                        then start a local web server using <code>python -m http.server 8000</code>
+                    </p>
+                </div>
+            `;
+        }
+
+        // Update progress ring
+        function updateProgressRing(percentage) {
+            const ring = document.getElementById('progress-ring');
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (percentage / 100) * circumference;
+            ring.style.strokeDashoffset = offset;
+            document.getElementById('progress-value').textContent = Math.round(percentage) + '%';
+        }
+
+        // Render V-Model workflow phases
+        function renderWorkflowPhases(data) {
+            const container = document.getElementById('workflow-phases');
+            const phases = data.vModelPhases || {};
+            const currentPhaseNum = data.currentPhase?.number || 0;
+            
+            const phaseOrder = [
+                { key: 'phase1_concept', num: 1, name: 'Concept' },
+                { key: 'phase2_requirements', num: 2, name: 'Requirements' },
+                { key: 'phase3_design', num: 3, name: 'Design' },
+                { key: 'phase4_implementation', num: 4, name: 'Implementation' },
+                { key: 'phase5_verification', num: 5, name: 'Verification' },
+                { key: 'phase6_production', num: 6, name: 'Production' }
+            ];
+
+            container.innerHTML = phaseOrder.map(({ key, num, name }) => {
+                const phase = phases[key] || { status: 'pending', progress: 0 };
+                const isActive = currentPhaseNum === num;
+                const isComplete = phase.status === 'complete';
+                const statusClass = isComplete ? 'complete' : isActive ? 'active' : '';
+                
+                const tabMap = {
+                    'Concept': 'overview',
+                    'Requirements': 'requirements',
+                    'Design': 'design',
+                    'Implementation': 'implementation',
+                    'Verification': 'verification',
+                    'Production': 'production'
+                };
+                const tabName = tabMap[name] || 'overview';
+                
+                return `
+                    <div class="phase-card ${statusClass}" onclick="showTab('${tabName}')">
+                        <div class="phase-number">${num}</div>
+                        <div class="phase-name"><span style="opacity: 0.7; font-size: 0.9em;">2.${num}</span> ${phase.name || name}</div>
+                        <div class="phase-status">${phase.status || 'pending'}</div>
+                        <div class="phase-progress">
+                            <div class="phase-progress-fill" style="width: ${phase.progress || 0}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update memory system status
+        function updateMemorySystem(data) {
+            const memorySystem = data.memory_system || {};
+            
+            // Update coordination log
+            const coord = memorySystem.coordination || {};
+            const coordEventsEl = document.getElementById('coord-events');
+            const coordStatusEl = document.getElementById('coord-status');
+            if (coordEventsEl) coordEventsEl.textContent = coord.event_count || 0;
+            if (coordStatusEl) coordStatusEl.textContent = coord.status || 'Active';
+            
+            // Update change log
+            const changes = memorySystem.changes || {};
+            const changeCountEl = document.getElementById('change-count');
+            const changeStatusEl = document.getElementById('change-status');
+            if (changeCountEl) changeCountEl.textContent = changes.change_count || 0;
+            if (changeStatusEl) changeStatusEl.textContent = changes.status || 'Active';
+            
+            // Update interface registry
+            const interfaces = memorySystem.interfaces || {};
+            const interfaceCountEl = document.getElementById('interface-count');
+            const interfaceStatusEl = document.getElementById('interface-status');
+            if (interfaceCountEl) interfaceCountEl.textContent = interfaces.interface_count || 0;
+            if (interfaceStatusEl) interfaceStatusEl.textContent = interfaces.status || 'Active';
+            
+            // Update validation log
+            const validation = memorySystem.validation || {};
+            const validationCountEl = document.getElementById('validation-count');
+            const validationStatusEl = document.getElementById('validation-status');
+            if (validationCountEl) validationCountEl.textContent = validation.validation_count || 0;
+            if (validationStatusEl) validationStatusEl.textContent = validation.status || 'Active';
+            
+            // Update project memory
+            const projectMemory = memorySystem.project_memory || {};
+            const decisionCountEl = document.getElementById('decision-count');
+            const memoryStatusEl = document.getElementById('memory-status');
+            if (decisionCountEl) decisionCountEl.textContent = projectMemory.decision_count || 0;
+            if (memoryStatusEl) memoryStatusEl.textContent = projectMemory.status || 'Active';
+        }
+
+        // Render overview tab
+        function renderOverview(data) {
+            const container = document.getElementById('overview-grid');
+            const metadata = data.metadata || {};
+            
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📋 Project Information</h3>
+                    </div>
+                    <div>
+                        <p style="margin-bottom: 10px;"><strong>Project:</strong> ${metadata.projectName || 'N/A'}</p>
+                        <p style="margin-bottom: 10px;"><strong>Concept:</strong> ${metadata.projectConcept || 'N/A'}</p>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary);">${metadata.projectDescription || ''}</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 Requirements</h3>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <div class="metric-value">${data.requirements?.total || 0}</div>
+                            <div class="metric-label">Total</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--success);">${data.requirements?.approved || 0}</div>
+                            <div class="metric-label">Approved</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--warning);">${data.requirements?.inProgress || 0}</div>
+                            <div class="metric-label">In Progress</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger);">${data.requirements?.pending || 0}</div>
+                            <div class="metric-label">Pending</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔄 Change Management</h3>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--danger);">${data.changeManagement?.openECOs || 0}</div>
+                            <div class="metric-label">Open ECOs</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--warning);">${data.changeManagement?.pendingApproval || 0}</div>
+                            <div class="metric-label">Pending</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: var(--success);">${data.changeManagement?.approved || 0}</div>
+                            <div class="metric-label">Approved</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">✅ Compliance</h3>
+                    </div>
+                    <ul class="status-list">
+                        ${renderStatusItem('Compliance Matrix', data.compliance?.matrix)}
+                        ${renderStatusItem('Compliance Testing', data.compliance?.testing)}
+                        ${renderStatusItem('Certification', data.compliance?.certification)}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Render requirements tab
+        function renderRequirements(data) {
+            const container = document.getElementById('requirements-content');
+            const reqs = data.requirements || {};
+            
+            container.innerHTML = `
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="metric">
+                        <div class="metric-value">${reqs.total || 0}</div>
+                        <div class="metric-label">Total Requirements</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: var(--success);">${reqs.approved || 0}</div>
+                        <div class="metric-label">Approved</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: var(--warning);">${reqs.inProgress || 0}</div>
+                        <div class="metric-label">In Progress</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: var(--danger);">${reqs.pending || 0}</div>
+                        <div class="metric-label">Pending</div>
+                    </div>
+                </div>
+                ${reqs.list && reqs.list.length > 0 ? `
+                    <h4 style="margin: 20px 0 10px 0;">Recent Requirements:</h4>
+                    <ul class="status-list">
+                        ${reqs.list.map(req => `
+                            <li class="status-item ${req.status === 'approved' ? 'complete' : req.status === 'in-progress' ? 'in-progress' : 'pending'}">
+                                <span><strong>${req.id}</strong>: ${req.title || 'No title'}</span>
+                                <span class="status-badge badge-${req.status === 'approved' ? 'complete' : req.status === 'in-progress' ? 'in-progress' : 'pending'}">
+                                    ${req.status}
+                                </span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                ` : '<p style="color: var(--text-secondary);">No requirements found.</p>'}
+            `;
+        }
+
+        // Render design tab
+        function renderDesign(data) {
+            const container = document.getElementById('design-content');
+            const design = data.design || {};
+            
+            container.innerHTML = `
+                <ul class="status-list">
+                    ${renderStatusItem('Concept Sketches', design.conceptSketches)}
+                    ${renderStatusItem('3D Skeletons', design.skeletons)}
+                    ${renderStatusItem('Manufacturing-Ready Files', design.manufacturing)}
+                    ${renderStatusItem('Assemblies', design.assemblies)}
+                    ${renderStatusItem('Technical Drawings', design.drawings)}
+                    ${renderStatusItem('GD&T Drawings', design.gdtDrawings)}
+                    ${renderStatusItem('DFM Review', design.dfm)}
+                    ${renderStatusItem('DFA Review', design.dfa)}
+                    ${renderStatusItem('STEP Validation', design.stepValidation)}
+                    ${renderStatusItem('Assembly Validation', design.assemblyValidation)}
+                </ul>
+            `;
+        }
+
+        // Render implementation tab
+        function renderImplementation(data) {
+            const container = document.getElementById('implementation-content');
+            const impl = data.implementation || {};
+            
+            container.innerHTML = `
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="metric">
+                        <div class="metric-value">${impl.codeFiles || 0}</div>
+                        <div class="metric-label">Code Files</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">${impl.reviews || 0}</div>
+                        <div class="metric-label">Code Reviews</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: var(--primary);">${impl.progress || 0}%</div>
+                        <div class="metric-label">Progress</div>
+                    </div>
+                </div>
+                <div class="status-item ${impl.status === 'complete' ? 'complete' : impl.status === 'in-progress' ? 'in-progress' : 'pending'}">
+                    <span>Implementation Status</span>
+                    <span class="status-badge badge-${impl.status === 'complete' ? 'complete' : impl.status === 'in-progress' ? 'in-progress' : 'pending'}">
+                        ${impl.status || 'pending'}
+                    </span>
+                </div>
+            `;
+        }
+
+        // Render verification tab
+        function renderVerification(data) {
+            const container = document.getElementById('verification-content');
+            const verif = data.verification || {};
+            
+            container.innerHTML = `
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="metric">
+                        <div class="metric-value">${verif.testFiles || 0}</div>
+                        <div class="metric-label">Test Files</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">${verif.coverage || 0}</div>
+                        <div class="metric-label">Coverage Reports</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" style="color: var(--primary);">${verif.progress || 0}%</div>
+                        <div class="metric-label">Progress</div>
+                    </div>
+                </div>
+                <div class="status-item ${verif.status === 'complete' ? 'complete' : verif.status === 'in-progress' ? 'in-progress' : 'pending'}">
+                    <span>Verification Status</span>
+                    <span class="status-badge badge-${verif.status === 'complete' ? 'complete' : verif.status === 'in-progress' ? 'in-progress' : 'pending'}">
+                        ${verif.status || 'pending'}
+                    </span>
+                </div>
+            `;
+        }
+
+        // Render production tab
+        function renderProduction(data) {
+            const container = document.getElementById('production-content');
+            const prod = data.production || {};
+            
+            container.innerHTML = `
+                <ul class="status-list">
+                    ${renderStatusItem('Pre-Production Review', prod.preReview)}
+                    ${renderStatusItem('Release Gate Checklist', prod.releaseGate)}
+                    ${renderStatusItem('Release Documentation', prod.releasePackage)}
+                </ul>
+                <div style="margin-top: 20px; padding: 15px; background: var(--bg-primary); border-radius: 8px;">
+                    <strong>Production Version:</strong> 
+                    <span style="color: var(--primary); font-weight: 600;">${prod.version || 'Not Assigned'}</span>
+                </div>
+            `;
+        }
+
+        // Render timeline tab
+        function renderTimeline(data) {
+            const container = document.getElementById('timeline-content');
+            const timeline = data.timeline || {};
+            const events = timeline.events || [];
+            
+            if (events.length === 0) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <h3>No Timeline Data Available</h3>
+                        <p>Timeline data will appear here once session logs are created.</p>
+                        <p style="margin-top: 10px; font-size: 0.875rem; color: var(--text-secondary);">
+                            Project Initiated: ${timeline.projectInitiated || 'Unknown'}
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <h2 style="margin-bottom: 20px;">Project Timeline</h2>
+                <p style="margin-bottom: 30px; color: var(--text-secondary);">
+                    Project Initiated: <strong>${timeline.projectInitiated || 'Unknown'}</strong>
+                </p>
+                ${events.map(event => `
+                    <div class="timeline-event">
+                        <div class="timeline-event-header">
+                            <div class="timeline-date">${event.timestamp || 'Unknown date'}</div>
+                            <div class="timeline-persona">${event.persona || 'System'}</div>
+                        </div>
+                        <div style="margin-bottom: 8px; font-weight: 600;">${event.command || 'Activity'}</div>
+                        ${event.filesCreated > 0 ? `
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                ${event.filesCreated} file${event.filesCreated !== 1 ? 's' : ''} created
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        // Render status item helper
+        function renderStatusItem(label, status) {
+            const statusClass = status === 'complete' ? 'complete' : status === 'in-progress' ? 'in-progress' : 'pending';
+            const badgeClass = status === 'complete' ? 'complete' : status === 'in-progress' ? 'in-progress' : 'pending';
+            const badgeText = status === 'complete' ? 'Complete' : status === 'in-progress' ? 'In Progress' : 'Pending';
+            
+            return `
+                <li class="status-item ${statusClass}">
+                    <span>${label}</span>
+                    <span class="status-badge badge-${badgeClass}">${badgeText}</span>
+                </li>
+            `;
+        }
+
+        // Show loading state for a tab
+        function showTabLoading(tabName) {
+            const containerMap = {
+                'overview': 'overview-grid',
+                'requirements': 'requirements-content',
+                'design': 'design-content',
+                'implementation': 'implementation-content',
+                'verification': 'verification-content',
+                'production': 'production-content',
+                'timeline': 'timeline-content'
+            };
+            
+            const containerId = containerMap[tabName];
+            if (!containerId) return;
+            
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <h3>Loading ${tabName} data...</h3>
+                        <p>Please wait while data is being loaded.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render tab content
+        function renderTabContent(tabName) {
+            // Show loading state if data not ready
+            if (!dashboardData) {
+                showTabLoading(tabName);
+                return;
+            }
+            
+            // Ensure the container exists before rendering
+            let containerExists = false;
+            switch(tabName) {
+                case 'overview':
+                    containerExists = document.getElementById('overview-grid') !== null;
+                    if (containerExists) renderOverview(dashboardData);
+                    break;
+                case 'requirements':
+                    containerExists = document.getElementById('requirements-content') !== null;
+                    if (containerExists) renderRequirements(dashboardData);
+                    break;
+                case 'design':
+                    containerExists = document.getElementById('design-content') !== null;
+                    if (containerExists) renderDesign(dashboardData);
+                    break;
+                case 'implementation':
+                    containerExists = document.getElementById('implementation-content') !== null;
+                    if (containerExists) renderImplementation(dashboardData);
+                    break;
+                case 'verification':
+                    containerExists = document.getElementById('verification-content') !== null;
+                    if (containerExists) renderVerification(dashboardData);
+                    break;
+                case 'production':
+                    containerExists = document.getElementById('production-content') !== null;
+                    if (containerExists) renderProduction(dashboardData);
+                    break;
+                case 'timeline':
+                    containerExists = document.getElementById('timeline-content') !== null;
+                    if (containerExists) renderTimeline(dashboardData);
+                    break;
+            }
+            
+            // If container doesn't exist, show loading
+            if (!containerExists) {
+                showTabLoading(tabName);
+            }
+        }
+
+        // Refresh dashboard
+        async function refreshDashboard() {
+            const btn = document.getElementById('refresh-btn');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span><span>Refreshing...</span>';
+
+            try {
+                // Try to trigger data regeneration via a simple endpoint (if available)
+                // For now, just reload the data
+                const data = await loadDashboardData();
+                if (data) {
+                    dashboardData = data;
+                    renderDashboard();
+                }
+            } catch (error) {
+                console.error('Error refreshing:', error);
+                alert('Failed to refresh dashboard. Make sure generate_dashboard_data.py has been run recently.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        // Render entire dashboard
+        function renderDashboard() {
+            if (!dashboardData) return;
+            
+            const metadata = dashboardData.metadata || {};
+            const currentPhase = dashboardData.currentPhase || {};
+            
+            // Update header
+            document.getElementById('project-name').textContent = metadata.projectName || 'Project';
+            
+            // Update overall progress
+            const overallProgress = metadata.overallProgress || 0;
+            updateProgressRing(overallProgress);
+            
+            // Update current phase
+            document.getElementById('current-phase-name').textContent = 
+                `${currentPhase.name || 'Not Started'} - ${currentPhase.subPhase || ''}`;
+            document.getElementById('phase-progress-bar').style.width = `${currentPhase.progress || 0}%`;
+            
+            // Update last updated
+            const lastUpdated = metadata.lastUpdated || 'Never';
+            document.getElementById('last-updated').textContent = lastUpdated;
+            document.getElementById('footer-updated').textContent = lastUpdated;
+            
+            // Render workflow phases
+            renderWorkflowPhases(dashboardData);
+            
+            // Update memory system status
+            updateMemorySystem(dashboardData);
+            
+            // Render current tab
+            renderTabContent(currentTab);
+        }
+
+        // Initialize dashboard
+        async function initDashboard() {
+            // Show loading state for initial tab
+            showTabLoading(currentTab);
+            
+            const data = await loadDashboardData();
+            if (data) {
+                dashboardData = data;
+                renderDashboard();
+            } else {
+                // If data failed to load, keep showing loading state
+                showTabLoading(currentTab);
+            }
+        }
+
+        // Initialize on load
+        initDashboard();
+
+        // Auto-refresh every 60 seconds
+        setInterval(async () => {
+            const data = await loadDashboardData();
+            if (data) {
+                dashboardData = data;
+                // Always re-render the current tab when data updates
+                renderDashboard();
+                // Ensure current tab is re-rendered
+                renderTabContent(currentTab);
+            }
+        }, 60000);
+    </script>
+</body>
+</html>

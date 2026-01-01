@@ -1,0 +1,72 @@
+{
+  "project_name": "[PROJECT_NAME]",
+  "last_updated": "[YYYY-MM-DD HH:MM:SS]",
+  "version": "1.0",
+  "memory_sections": {
+    "project_state": {
+      "name": "Project State Memory",
+      "description": "Tracks current phase, completed work, pending tasks",
+      "location": "project_memory/project_state.json",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    },
+    "decisions": {
+      "name": "Decision Memory",
+      "description": "Records critical decisions and rationale",
+      "location": "project_memory/decisions/decision_log.md",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    },
+    "coordination": {
+      "name": "Coordination Memory",
+      "description": "Tracks persona interactions and agreements",
+      "location": "coordination/coordination_log.md",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    },
+    "changes": {
+      "name": "Change History Memory",
+      "description": "Tracks design changes and impacts",
+      "location": "changes/change_log.md",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    },
+    "interfaces": {
+      "name": "Interface Memory",
+      "description": "Single source of truth for interfaces",
+      "location": "interfaces/interface_registry.md",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    },
+    "geometric_state": {
+      "name": "Geometric State Memory",
+      "description": "Persistent geometric state tracking",
+      "location": "02_Design/geometric_state/state_ledger.md",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    },
+    "validation": {
+      "name": "Validation Memory",
+      "description": "Tracks validation checkpoints and results",
+      "location": "validation/validation_log.md",
+      "files": [],
+      "file_count": 0,
+      "last_file_update": null
+    }
+  },
+  "statistics": {
+    "total_memory_files": 0,
+    "total_decisions": 0,
+    "total_coordination_events": 0,
+    "total_changes": 0,
+    "total_interfaces": 0,
+    "total_validations": 0
+  }
+}
+

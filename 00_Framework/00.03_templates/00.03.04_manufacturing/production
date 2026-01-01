@@ -1,0 +1,288 @@
+# Supplier Communication Templates
+
+**Purpose:** Standardized templates for communicating with suppliers and manufacturers
+
+**Owner:** @DesignEng, @SeniorEng  
+**Version:** 1.0  
+**Date:** 2024-12-22
+
+---
+
+## 1. Request for Quote (RFQ) Template
+
+**Subject:** Request for Quote - [Part Number] - [Part Name]
+
+**Date:** [Date]  
+**Project:** [Project Name]  
+**Part Number:** [Part Number]  
+**Part Name:** [Part Name]  
+**Quantity:** [Quantity]  
+**Target Delivery:** [Date]
+
+**Dear [Supplier Name],**
+
+We are requesting a quote for the manufacture of the following part:
+
+**Part Information:**
+- Part Number: [Part Number]
+- Part Name: [Part Name]
+- Material: [Material Specification]
+- Quantity: [Quantity]
+- Target Delivery Date: [Date]
+
+**Attachments:**
+- Technical Drawing: [Part Number]_drawing.pdf
+- 3D Model: [Part Number].step
+- Manufacturing Notes: [Part Number]_notes.md
+- BOM (if applicable): [BOM file]
+
+**Requirements:**
+- [ ] All dimensions per technical drawing
+- [ ] Tolerances per ASME Y14.5 standard
+- [ ] Surface finish per specifications
+- [ ] Material certification required
+- [ ] First Article Inspection (FAI) required
+- [ ] Quality documentation required
+
+**Please provide:**
+1. Unit price
+2. Setup cost (if applicable)
+3. Lead time
+4. Minimum order quantity (MOQ)
+5. Payment terms
+6. Quality certifications
+
+**Questions or clarifications:**
+Please contact [Name] at [Email] or [Phone]
+
+Thank you for your time and consideration.
+
+**Best regards,**  
+[Your Name]  
+[Company Name]
+
+---
+
+## 2. Technical Specification Package Template
+
+**Subject:** Technical Specification Package - [Part Number]
+
+**Date:** [Date]  
+**Project:** [Project Name]  
+**Part Number:** [Part Number]
+
+**Package Contents:**
+1. Technical Drawing (PDF, DXF, DWG)
+2. 3D Model (STEP file with PMI)
+3. Manufacturing Notes
+4. Material Specifications
+5. Quality Requirements
+6. Inspection Procedures
+
+**Part Specifications:**
+- Part Number: [Part Number]
+- Part Name: [Part Name]
+- Material: [Material Specification]
+- Revision: [Revision]
+
+**Critical Dimensions:**
+[List critical dimensions with tolerances]
+
+**GD&T Requirements:**
+[List GD&T callouts]
+
+**Surface Finish:**
+[List surface finish requirements]
+
+**Thread Specifications:**
+[List thread specifications]
+
+**Quality Requirements:**
+- First Article Inspection (FAI) required
+- Material certification required
+- Inspection documentation required
+- Compliance with [Standards]
+
+**Delivery Requirements:**
+- Packaging: [Packaging requirements]
+- Labeling: [Labeling requirements]
+- Documentation: [Documentation requirements]
+
+**Contact Information:**
+For questions or clarifications, contact:
+- Technical: [Name] - [Email] - [Phone]
+- Quality: [Name] - [Email] - [Phone]
+- Procurement: [Name] - [Email] - [Phone]
+
+---
+
+## 3. Change Notification Template
+
+**Subject:** Engineering Change Notification - [Part Number] - [Change Description]
+
+**Date:** [Date]  
+**ECO Number:** [ECO-XXX]  
+**Part Number:** [Part Number]  
+**Revision:** [Old Revision] → [New Revision]  
+**Priority:** [High / Medium / Low]
+
+**Dear [Supplier Name],**
+
+This is to notify you of an engineering change to the above part number.
+
+**Change Description:**
+[Detailed description of the change]
+
+**Reason for Change:**
+[Reason for the change]
+
+**Impact:**
+- **Technical Impact:** [Description]
+- **Cost Impact:** [Description]
+- **Schedule Impact:** [Description]
+- **Tooling Impact:** [Description]
+
+**Effective Date:**
+- Change effective: [Date]
+- Last order with old revision: [Date]
+- First order with new revision: [Date]
+
+**Attachments:**
+- Updated Technical Drawing: [Part Number]_drawing.pdf
+- Updated 3D Model: [Part Number].step
+- Change Summary: [Change summary document]
+
+**Action Required:**
+- [ ] Acknowledge receipt of change notification
+- [ ] Confirm understanding of change
+- [ ] Provide impact assessment (if requested)
+- [ ] Update manufacturing processes
+- [ ] Update quality procedures
+
+**Questions:**
+Please contact [Name] at [Email] or [Phone]
+
+**Best regards,**  
+[Your Name]  
+[Company Name]
+
+---
+
+## 4. Quality Issue Communication Template
+
+**Subject:** Quality Issue - [Part Number] - [Issue Description]
+
+**Date:** [Date]  
+**Issue Number:** [Issue-XXX]  
+**Part Number:** [Part Number]  
+**Batch/Lot:** [Batch/Lot Number]  
+**Severity:** [Critical / High / Medium / Low]
+
+**Dear [Supplier Name],**
+
+We have identified a quality issue with the above part number.
+
+**Issue Description:**
+[Detailed description of the issue]
+
+**Affected Quantity:**
+- Quantity affected: [Number]
+- Batch/Lot numbers: [List]
+
+**Issue Details:**
+- **What:** [What is the issue?]
+- **Where:** [Where was it found?]
+- **When:** [When was it discovered?]
+- **Impact:** [What is the impact?]
+
+**Evidence:**
+- Photos: [Attached]
+- Inspection reports: [Attached]
+- Test results: [Attached]
+
+**Immediate Actions Required:**
+1. [Action 1]
+2. [Action 2]
+3. [Action 3]
+
+**Corrective Actions Required:**
+1. [Corrective action 1]
+2. [Corrective action 2]
+3. [Corrective action 3]
+
+**Preventive Actions Required:**
+1. [Preventive action 1]
+2. [Preventive action 2]
+
+**Response Required:**
+Please provide:
+1. Root cause analysis
+2. Corrective action plan
+3. Preventive action plan
+4. Timeline for resolution
+
+**Response Deadline:** [Date]
+
+**Contact:**
+For questions, contact [Name] at [Email] or [Phone]
+
+**Best regards,**  
+[Your Name]  
+[Company Name]
+
+---
+
+## 5. Delivery Schedule Template
+
+**Subject:** Delivery Schedule - [Project Name]
+
+**Date:** [Date]  
+**Project:** [Project Name]  
+**Supplier:** [Supplier Name]
+
+**Dear [Supplier Name],**
+
+Please find below the delivery schedule for [Project Name].
+
+**Delivery Schedule:**
+
+| Part Number | Part Name | Quantity | Required Date | Status |
+|-------------|-----------|----------|---------------|--------|
+| [Part-001] | [Name] | [Qty] | [Date] | [Status] |
+| [Part-002] | [Name] | [Qty] | [Date] | [Status] |
+
+**Notes:**
+- All deliveries must include:
+  - Material certification
+  - Inspection documentation
+  - FAI report (for first delivery)
+- Packaging requirements: [Requirements]
+- Labeling requirements: [Requirements]
+
+**Shipping Address:**
+[Shipping address]
+
+**Contact:**
+For delivery questions, contact [Name] at [Email] or [Phone]
+
+**Best regards,**  
+[Your Name]  
+[Company Name]
+
+---
+
+## Usage Notes
+
+1. **Customize templates** for your specific needs
+2. **Fill in all placeholders** before sending
+3. **Attach required documents** (drawings, models, specifications)
+4. **Keep records** of all communications
+5. **Follow up** on responses and actions
+
+---
+
+**Related Documents:**
+- Manufacturing Feedback Loop: `02_Design/manufacturing/manufacturing_feedback_loop.md`
+- ECO Process: `01_Requirements/ECO_process.md`
+- Supplier Package Generator: `02_Design/production/generate_supplier_package.py`
+

@@ -1,0 +1,162 @@
+"""
+Visualization System
+3D visualization of parts and analysis results
+
+Owner: @DesignEng
+Version: 1.0
+Date: 2025-12-30
+"""
+
+from typing import Optional, Tuple, List
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+
+# VTK is available (now required)
+VTK_AVAILABLE = False
+try:
+    import vtk
+    from vtkmodules.vtkRenderingCore import (
+        vtkActor, vtkPolyDataMapper, vtkRenderer, vtkRenderWindow
+    )
+    VTK_AVAILABLE = True
+except ImportError:
+    pass
+
+
+class PartVisualizer:
+    """3D visualization of parts and analysis results"""
+    
+    def __init__(self):
+        """Initialize visualizer"""
+        self.use_vtk = VTK_AVAILABLE
+        self.renderer = None
+        self.render_window = None
+        self.figures = []  # Store matplotlib figures
+        
+        if self.use_vtk:
+            self._init_vtk()
+    
+    def _init_vtk(self):
+        """Initialize VTK renderer"""
+        try:
+            from vtkmodules.vtkRenderingCore import vtkRenderer, vtkRenderWindow
+            self.renderer = vtkRenderer()
+            self.renderer.SetBackground(0.1, 0.1, 0.1)
+            self.render_window = vtkRenderWindow()
+            self.render_window.AddRenderer(self.renderer)
+            self.render_window.SetSize(800, 600)
+        except Exception as e:
+            print(f"Warning: VTK initialization failed: {e}")
+            self.use_vtk = False
+    
+    def visualize_part(self, geometry, color: Tuple[float, float, float] = (0.7, 0.7, 0.9)):
+        """Visualize part geometry"""
+        # Placeholder - would implement VTK visualization here
+        pass
+    
+    def visualize_stress(self, geometry, stress_data: np.ndarray, color_map: str = "viridis"):
+        """Visualize stress distribution using matplotlib"""
+        try:
+            fig, ax = plt.subplots(figsize=(8, 6))
+            
+            # Create simple visualization (would be enhanced with actual geometry)
+            if stress_data is not None and len(stress_data) > 0:
+                im = ax.imshow(stress_data, cmap=color_map, aspect='auto')
+                plt.colorbar(im, ax=ax, label='Stress (MPa)')
+                ax.set_title('Stress Distribution')
+            else:
+                ax.text(0.5, 0.5, 'Stress visualization\n(geometry data needed)', 
+                       ha='center', va='center', transform=ax.transAxes)
+            
+            ax.set_xlabel('X (mm)')
+            ax.set_ylabel('Y (mm)')
+            plt.tight_layout()
+            
+            self.figures.append(fig)
+            return fig
+        except Exception as e:
+            print(f"Error creating stress visualization: {e}")
+            return None
+    
+    def visualize_temperature(self, geometry, temp_data: np.ndarray, color_map: str = "hot"):
+        """Visualize temperature distribution using matplotlib"""
+        try:
+            fig, ax = plt.subplots(figsize=(8, 6))
+            
+            if temp_data is not None and len(temp_data) > 0:
+                im = ax.imshow(temp_data, cmap=color_map, aspect='auto')
+                plt.colorbar(im, ax=ax, label='Temperature (°C)')
+                ax.set_title('Temperature Distribution')
+            else:
+                ax.text(0.5, 0.5, 'Temperature visualization\n(geometry data needed)', 
+                       ha='center', va='center', transform=ax.transAxes)
+            
+            ax.set_xlabel('X (mm)')
+            ax.set_ylabel('Y (mm)')
+            plt.tight_layout()
+            
+            self.figures.append(fig)
+            return fig
+        except Exception as e:
+            print(f"Error creating temperature visualization: {e}")
+            return None
+    
+    def visualize_wind_forces(self, geometry, force_vectors: List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]]):
+        """Visualize wind force vectors using matplotlib"""
+        try:
+            fig, ax = plt.subplots(figsize=(8, 6), subplot_kw={'projection': '3d'})
+            
+            if force_vectors:
+                for position, force in force_vectors:
+                    x, y, z = position
+                    dx, dy, dz = force
+                    ax.quiver(x, y, z, dx, dy, dz, color='red', arrow_length_ratio=0.3)
+                
+                ax.set_title('Wind Force Vectors')
+            else:
+                ax.text(0.5, 0.5, 0.5, 'Wind force visualization\n(force data needed)', 
+                       ha='center', va='center', transform=ax.transAxes)
+            
+            ax.set_xlabel('X (mm)')
+            ax.set_ylabel('Y (mm)')
+            ax.set_zlabel('Z (mm)')
+            
+            self.figures.append(fig)
+            return fig
+        except Exception as e:
+            print(f"Error creating wind visualization: {e}")
+            return None
+    
+    def create_matplotlib_canvas(self, parent_widget):
+        """Create matplotlib canvas for embedding in PyQt"""
+        try:
+            from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+            from matplotlib.figure import Figure
+            
+            fig = Figure(figsize=(8, 6))
+            canvas = FigureCanvas(fig)
+            return canvas, fig
+        except Exception as e:
+            print(f"Error creating matplotlib canvas: {e}")
+            return None, None
+    
+    def get_render_window(self):
+        """Get VTK render window for embedding in GUI"""
+        return self.render_window if self.use_vtk else None
+    
+    def clear(self):
+        """Clear all visualizations"""
+        if self.renderer:
+            self.renderer.RemoveAllViewProps()
+        
+        # Close matplotlib figures
+        for fig in self.figures:
+            plt.close(fig)
+        self.figures = []
+    
+    def render(self):
+        """Render the scene"""
+        if self.render_window:
+            self.render_window.Render()

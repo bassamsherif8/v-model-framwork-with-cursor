@@ -1,0 +1,86 @@
+{
+  "projectName": "New V-Model Project",
+  "projectConcept": "Concept Phase",
+  "projectDescription": "Enter your project description here",
+  "currentPhase": {
+    "number": 1,
+    "name": "Concept Phase",
+    "subPhase": "Initial Concept Development",
+    "progress": 0
+  },
+  "requirements": {
+    "total": 0,
+    "approved": 0,
+    "inProgress": 0,
+    "pending": 0,
+    "list": []
+  },
+  "design": {
+    "conceptSketches": "pending",
+    "skeletons": "pending",
+    "manufacturing": "pending",
+    "assemblies": "pending",
+    "drawings": "pending",
+    "dfm": "pending",
+    "dfa": "pending",
+    "stepValidation": "pending",
+    "assemblyValidation": "pending",
+    "gdtDrawings": "pending",
+    "commonParts": "active"
+  },
+  "production": {
+    "preReview": "pending",
+    "releaseGate": "pending",
+    "releasePackage": "pending",
+    "version": null
+  },
+  "changeManagement": {
+    "openECOs": 0,
+    "pendingApproval": 0,
+    "approved": 0,
+    "list": []
+  },
+  "compliance": {
+    "matrix": "pending",
+    "testing": "pending",
+    "certification": "pending"
+  },
+  "manufacturingFeedback": {
+    "tools": "pending",
+    "data": "pending",
+    "status": "pending"
+  },
+  "recentActivity": [],
+  "timeline": {
+    "projectInitiated": null,
+    "events": []
+  },
+  "memory_system": {
+    "coordination": {
+      "status": "active",
+      "event_count": 0,
+      "last_update": null
+    },
+    "changes": {
+      "status": "active",
+      "change_count": 0,
+      "last_update": null
+    },
+    "interfaces": {
+      "status": "active",
+      "interface_count": 0,
+      "last_update": null
+    },
+    "validation": {
+      "status": "active",
+      "validation_count": 0,
+      "last_update": null
+    },
+    "project_memory": {
+      "status": "active",
+      "decision_count": 0,
+      "last_update": null
+    }
+  },
+  "lastUpdated": "2025-12-31 02:44:10"
+}

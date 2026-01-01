@@ -1,0 +1,34 @@
+# FreeCAD Python API Dependencies
+# For manufacturing drawing generation
+
+# FreeCAD is typically installed as a standalone application
+# Python API is included with FreeCAD installation
+# This file documents the setup requirements
+
+# FreeCAD Installation:
+# - Windows: Download from https://www.freecad.org/downloads.php
+# - Linux: sudo apt-get install freecad (or use AppImage)
+# - macOS: Download from https://www.freecad.org/downloads.php
+
+# FreeCAD Python API Usage:
+# - FreeCAD Python API is accessed via FreeCAD module
+# - Run scripts using: freecadcmd script.py
+# - Or import FreeCAD in Python: import FreeCAD
+
+# Additional Python Libraries (if needed):
+# Note: FreeCAD includes most required libraries
+# Additional libraries may be needed for specific functionality:
+
+# For DXF export (if FreeCAD DXF support is insufficient):
+# dxfwrite==1.1.6  # Alternative DXF library (optional)
+
+# For PDF generation:
+# reportlab==4.0.4  # For PDF technical drawings (optional, FreeCAD can export PDF)
+
+# For enhanced drawing capabilities:
+# matplotlib==3.7.1  # For additional visualization (already in project)
+
+# Note: FreeCAD Python API documentation:
+# https://wiki.freecad.org/Python_API
+# https://wiki.freecad.org/TechDraw_Workbench
+

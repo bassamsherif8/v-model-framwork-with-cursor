@@ -1,0 +1,45 @@
+# Python virtual environment
+cad_env/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# STEP files (can be regenerated)
+*.step
+*.STEP
+
+# FreeCAD files
+*.FCStd
+*.fcstd
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Project-specific data files
+dashboard_data.json
+.vmodel_framework_copier.json
+
+# Test files
+test_function.step
+
+# Temporary files
+*.tmp
+*.temp
+
