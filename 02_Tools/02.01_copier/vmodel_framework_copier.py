@@ -12,6 +12,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from pathlib import Path
 import json
+import fnmatch
 
 class ProjectTemplateCopier:
     def __init__(self, root):
@@ -245,7 +246,7 @@ class ProjectTemplateCopier:
         
         if has_new_structure:
             # NEW STRUCTURE: Copy from 00_Framework/
-            # Copy entire 00_Framework directory
+            # Copy entire 00_Framework directory (includes CAD environment, dashboard, memory system, etc.)
             if (source / '00_Framework').exists():
                 dirs_to_copy.append('00_Framework')
             
@@ -262,6 +263,26 @@ class ProjectTemplateCopier:
             # Copy documentation
             if (source / '03_Documentation').exists():
                 dirs_to_copy.append('03_Documentation')
+            
+            # Copy project structure guide
+            if (source / 'PROJECT_STRUCTURE.md').exists():
+                files_to_copy.append('PROJECT_STRUCTURE.md')
+            
+            # Copy main README.md (framework-level documentation)
+            if (source / 'README.md').exists():
+                files_to_copy.append('README.md')
+            
+            # Copy utility scripts
+            if (source / 'reset_dashboard_data.py').exists():
+                files_to_copy.append('reset_dashboard_data.py')
+            
+            # Copy visual reference chart
+            if (source / 'v role workflow chart.png').exists():
+                files_to_copy.append('v role workflow chart.png')
+            
+            # Copy CAD environment activation script (if at root)
+            if (source / 'cad_env_activate.ps1').exists():
+                files_to_copy.append('cad_env_activate.ps1')
         else:
             # OLD STRUCTURE: Copy from old locations (backward compatibility)
             # Core files
@@ -323,25 +344,9 @@ class ProjectTemplateCopier:
         if (source / '.gitignore').exists():
             files_to_copy.append('.gitignore')
         
-        # Handle manufacturing files and requirements templates
-        if has_new_structure:
-            # NEW STRUCTURE: Files are in 00_Framework/00.03_templates/
-            # Manufacturing templates
-            mfg_template_dir = source / '00_Framework' / '00.03_templates' / '00.03.04_manufacturing'
-            if mfg_template_dir.exists():
-                # Copy entire manufacturing templates directory
-                dirs_to_copy.append('00_Framework/00.03_templates/00.03.04_manufacturing')
-            
-            # Requirements templates
-            req_template_dir = source / '00_Framework' / '00.03_templates' / '00.03.02_requirements'
-            if req_template_dir.exists():
-                # Copy entire requirements templates directory
-                dirs_to_copy.append('00_Framework/00.03_templates/00.03.02_requirements')
-            
-            # Design templates (geometric_state, functional_design, visualization_app)
-            design_template_dir = source / '00_Framework' / '00.03_templates' / '00.03.03_design'
-            if design_template_dir.exists():
-                dirs_to_copy.append('00_Framework/00.03_templates/00.03.03_design')
+        # Note: For NEW STRUCTURE, templates are already included in 00_Framework/
+        # No need to add them separately - they will be copied as part of 00_Framework
+        # This ensures all framework files (dashboard, templates, memory system, etc.) are copied together
         else:
             # OLD STRUCTURE: Copy from old locations
             # Selective manufacturing files
@@ -544,27 +549,47 @@ class ProjectTemplateCopier:
         core_files = [
             '.cursorrules',
             '.gitignore',
+            'README.md',
+            'PROJECT_STRUCTURE.md',
+            'reset_dashboard_data.py',
+            'v role workflow chart.png',
+            'cad_env_activate.ps1',
             '03_Documentation/03.01_guides/V_MODEL_COMPLETE_GUIDE.html',
-            '00_Framework/00.06_dashboard/PROJECT_DASHBOARD.html',
-            '00_Framework/00.06_dashboard/generate_dashboard_data.py',
-            '00_Framework/00.06_dashboard/start_dashboard_server.bat',
-            '00_Framework/00.06_dashboard/start_dashboard_server.ps1',
-            '00_Framework/00.06_dashboard/HOW_TO_USE_DASHBOARD.md',
-            '00_Framework/00.06_dashboard/DASHBOARD_README.md',
-            # CAD Environment files (standardized pattern)
-            '00_Framework/00.07_cad_environment/activate_cad_env.bat',
-            '00_Framework/00.07_cad_environment/activate_cad_env.ps1',
-            '00_Framework/00.07_cad_environment/run_with_cad_env.bat',
-            '00_Framework/00.07_cad_environment/run_with_cad_env.ps1',
-            '00_Framework/00.07_cad_environment/setup_cad_env.py',
-            '00_Framework/00.07_cad_environment/CAD_ENV_SETUP.md',
-            # Other core files
             '03_Documentation/03.02_reference/PROJECT_TEMPLATE_FILES.md',
             '03_Documentation/03.01_guides/TEMPLATE_COPIER_README.md',
             '02_Tools/02.02_reset/reset_project_to_template.py',
-            '00_Framework/00.06_dashboard/dashboard_data_template.json',
         ]
         for file in core_files:
+            included_text.insert(tk.END, f"  • {file}\n")
+        
+        # Dashboard files (included in 00_Framework/00.06_dashboard/)
+        included_text.insert(tk.END, "\n📊 DASHBOARD FILES (included in 00_Framework/00.06_dashboard/):\n")
+        included_text.insert(tk.END, "-" * 80 + "\n")
+        dashboard_files = [
+            'PROJECT_DASHBOARD.html',
+            'generate_dashboard_data.py',
+            'start_dashboard_server.bat',
+            'start_dashboard_server.ps1',
+            'HOW_TO_USE_DASHBOARD.md',
+            'DASHBOARD_README.md',
+            'dashboard_data_template.json',
+        ]
+        for file in dashboard_files:
+            included_text.insert(tk.END, f"  • {file}\n")
+        
+        # CAD Environment files (included in 00_Framework/00.07_cad_environment/)
+        included_text.insert(tk.END, "\n🔧 CAD ENVIRONMENT FILES (included in 00_Framework/00.07_cad_environment/):\n")
+        included_text.insert(tk.END, "-" * 80 + "\n")
+        cad_files = [
+            'activate_cad_env.bat',
+            'activate_cad_env.ps1',
+            'run_with_cad_env.bat',
+            'run_with_cad_env.ps1',
+            'setup_cad_env.py',
+            'CAD_ENV_SETUP.md',
+            'CAD_ENVIRONMENT_SOLUTION.md',
+        ]
+        for file in cad_files:
             included_text.insert(tk.END, f"  • {file}\n")
         
         # Complete directories
@@ -577,8 +602,8 @@ class ProjectTemplateCopier:
             '  - 00.03_templates/ (concepts, requirements, design, manufacturing)',
             '  - 00.04_common_parts/ (cq_warehouse, custom parts)',
             '  - 00.05_memory_system/ (all 7 memory sections)',
-            '  - 00.06_dashboard/',
-            '  - 00.07_cad_environment/',
+            '  - 00.06_dashboard/ (dashboard HTML, scripts, templates)',
+            '  - 00.07_cad_environment/ (CAD environment setup files)',
             '02_Tools/ (copier, reset tools)',
             '03_Documentation/ (guides, reference)',
         ]
@@ -730,6 +755,71 @@ class ProjectTemplateCopier:
         
         text_widget.config(state=tk.DISABLED)
     
+    def should_exclude_file(self, file_path, relative_path):
+        """
+        Check if a file should be excluded based on patterns
+        
+        Args:
+            file_path: Full path to the file
+            relative_path: Relative path from source root
+            
+        Returns:
+            True if file should be excluded, False otherwise
+        """
+        file_name = file_path.name
+        relative_str = str(relative_path).replace('\\', '/')
+        
+        # Get exclusion patterns
+        _, excluded_file_patterns, _ = self.get_excluded_items()
+        
+        # Check against exclusion patterns
+        for pattern in excluded_file_patterns:
+            # Handle patterns with paths
+            if '/' in pattern:
+                if fnmatch.fnmatch(relative_str, pattern):
+                    return True
+            # Handle filename-only patterns
+            elif fnmatch.fnmatch(file_name, pattern):
+                return True
+        
+        # Always exclude __pycache__ directories
+        if file_path.is_dir() and file_name == '__pycache__':
+            return True
+        
+        return False
+    
+    def copy_directory_with_exclusions(self, src_dir, dst_dir, base_path=None):
+        """
+        Copy directory tree while excluding project-specific files
+        
+        Args:
+            src_dir: Source directory path
+            dst_dir: Destination directory path
+            base_path: Base path for calculating relative paths (for exclusion matching)
+        """
+        if base_path is None:
+            base_path = src_dir.parent
+        
+        # Create destination directory
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Copy files and subdirectories
+        for item in src_dir.iterdir():
+            relative_path = item.relative_to(base_path)
+            
+            # Check if should be excluded
+            if self.should_exclude_file(item, relative_path):
+                continue
+            
+            dst_item = dst_dir / item.name
+            
+            if item.is_dir():
+                # Recursively copy subdirectory
+                self.copy_directory_with_exclusions(item, dst_item, base_path)
+            elif item.is_file():
+                # Copy file
+                shutil.copy2(item, dst_item)
+    
     def copy_visualization_app(self, src_dir, dst_dir):
         """
         Copy visualization_app directory while excluding generated/cache files
@@ -778,17 +868,28 @@ class ProjectTemplateCopier:
         has_project_specific = (dest_root / 'Project_Specific').exists()
         
         if has_new_structure and has_project_specific:
-            # NEW STRUCTURE: Create project directories in Project_Specific/01_Project/
+            # NEW STRUCTURE: Create complete project directory structure in Project_Specific/01_Project/
             empty_dirs = [
+                # Concepts
+                'Project_Specific/01_Project/01.01_concepts',
+                'Project_Specific/01_Project/01.01_concepts/skeletons',
                 'Project_Specific/01_Project/01.01_concepts/skeletons/2d',
                 'Project_Specific/01_Project/01.01_concepts/sketches',
+                # Requirements
+                'Project_Specific/01_Project/01.02_requirements',
+                # Design
+                'Project_Specific/01_Project/01.03_design',
                 'Project_Specific/01_Project/01.03_design/01.03.01_parts',
                 'Project_Specific/01_Project/01.03_design/01.03.02_assemblies',
+                'Project_Specific/01_Project/01.03_design/01.03.02_assemblies/purchased_components',
                 'Project_Specific/01_Project/01.03_design/01.03.03_skeletons',
                 'Project_Specific/01_Project/01.03_design/01.03.04_visualizations',
                 'Project_Specific/01_Project/01.03_design/01.03.05_compliance',
+                # Implementation
                 'Project_Specific/01_Project/01.04_implementation',
+                # Verification
                 'Project_Specific/01_Project/01.05_verification',
+                # Logs
                 'Project_Specific/01_Project/01.06_logs',
             ]
         elif has_new_structure:
@@ -968,6 +1069,10 @@ Good luck with your project!
                     # Special handling for visualization_app to exclude generated files
                     if dir_path == '02_Design/visualization_app':
                         self.copy_visualization_app(src_dir, dst_dir)
+                    elif dir_path == '00_Framework':
+                        # Use custom copy function for 00_Framework to exclude project-specific files
+                        # but ensure all important framework files (including dashboard) are copied
+                        self.copy_directory_with_exclusions(src_dir, dst_dir, source)
                     else:
                         # Copy entire directory tree
                         shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
